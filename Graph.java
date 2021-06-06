@@ -1,50 +1,40 @@
-package finalize;
-
-import java.io.*; 
-import java.util.*; 
-   
-//DFS Technique for undirected graph
-class Graph { 
-    private int Vertices;   // No. of vertices 
-   
-    // adjacency list declaration
-    private LinkedList<Integer> adj_list[]; 
-   
-    // graph Constructor: to initialize adjacency lists as per no of vertices 
-    Graph(int v) { 
-        Vertices = v; 
-        adj_list = new LinkedList[v]; 
-        for (int i=0; i<v; ++i) 
-            adj_list[i] = new LinkedList(); 
-    } 
-   
-    //add an edge to the graph 
-    void addEdge(int v, int w) { 
-        adj_list[v].add(w);  // Add w to v's list. 
-    } 
-   
-    // helper function for DFS technique
-    void DFS_helper(int v,boolean visited[]) { 
-        // current node is visited 
-        visited[v] = true; 
-        System.out.print(v+" "); 
-   
-        // process all adjacent vertices 
-        Iterator<Integer> i = adj_list[v].listIterator(); 
-        while (i.hasNext()) 
-        { 
-            int n = i.next(); 
-            if (!visited[n]) 
-                DFS_helper(n, visited); 
-        } 
-    } 
-   
-    
-    void DFS(int v) { 
-        //initially none of the vertices are visited 
-        boolean visited[] = new boolean[Vertices]; 
-   
-        // call recursive DFS_helper function for DFS technique 
-        DFS_helper(v, visited); 
-    } 
+import java.util.HashMap;
+import java.util.LinkedHashSet;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.Set;
+ 
+public class Graph {
+    private Map<String, LinkedHashSet<String>> map = new HashMap();
+ 
+    public void addEdge(String node1, String node2) {
+        LinkedHashSet<String> adjacent = map.get(node1);
+        if(adjacent==null) {
+            adjacent = new LinkedHashSet();
+            map.put(node1, adjacent);
+        }
+        adjacent.add(node2);
+    }
+ 
+    public void addTwoWayVertex(String node1, String node2) {
+        addEdge(node1, node2);
+        addEdge(node2, node1);
+    }
+ 
+    public boolean isConnected(String node1, String node2) {
+        Set adjacent = map.get(node1);
+        if(adjacent==null) {
+            return false;
+        }
+        return adjacent.contains(node2);
+    }
+ 
+    public LinkedList<String> adjacentNodes(String last) {
+        LinkedHashSet<String> adjacent = map.get(last);
+        if(adjacent==null) {
+            return new LinkedList();
+        }
+        return new LinkedList<String>(adjacent);
+    }
 }
+
